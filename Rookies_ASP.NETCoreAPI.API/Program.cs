@@ -1,5 +1,6 @@
 
 using Rookies_ASP.NETCoreAPI.API.Dtos;
+using Rookies_ASP.NETCoreAPI.API.Middlewares;
 using Rookies_ASP.NETCoreAPI.API.Services;
 using Rookies_ASP.NETCoreAPI.Infrastructure.Repositories;
 
@@ -34,6 +35,7 @@ namespace Rookies_ASP.NETCoreAPI.API
 
             app.UseAuthorization();
 
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.MapControllers();
 

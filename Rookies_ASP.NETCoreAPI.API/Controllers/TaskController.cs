@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Rookies_ASP.NETCoreAPI.API.Dtos.RequestDtos;
+using Rookies_ASP.NETCoreAPI.API.Dtos.ResponseDtos;
 using Rookies_ASP.NETCoreAPI.API.Services;
 using Rookies_ASP.NETCoreAPI.Common;
 
@@ -16,78 +17,137 @@ namespace Rookies_ASP.NETCoreAPI.API.Controllers
             _taskService = taskService;
         }
         [HttpGet]
-        public IActionResult GetTasks()
+        public ApiResponse GetTasks()
         {
-            return Ok(_taskService.GetTasks());
+            return new ApiResponse
+            {
+                Data = _taskService.GetTasks(),
+                Message = "Get Tasks Successfully!"
+            };
         }
         [HttpGet("{id}")]
-        public IActionResult GetTask(Guid id)
+        public ApiResponse GetTask(Guid id)
         {
-            return Ok(_taskService.GetTask(id));
+            var task = _taskService.GetTask(id);
+            if (task != null)
+                return new ApiResponse
+                {
+                    Data = task,
+                    Message = "Get Task Successfully!"
+                };
+            else
+                return new ApiResponse
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "Get Task Failed!"
+                };
         }
         [HttpPost]
-        public IActionResult Add(RequestTaskDto taskDto)
+        public ApiResponse Add(RequestTaskDto taskDto)
         {
             int status = _taskService.Add(taskDto);
             if (status == ConstantsStatus.Success)
             {
-                return Ok("Create a new task successfully!");
+                return new ApiResponse
+                {
+                    Data = taskDto,
+                    Message = "Add Task Successfully!"
+                };
             }
             else
             {
-                return BadRequest("Create a new task failed!");
+                return new ApiResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Add Task Failed!"
+                };
             }
         }
         [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody] RequestTaskDto taskDto)
+        public ApiResponse Update(Guid id, [FromBody] RequestTaskDto taskDto)
         {
             int status = _taskService.Update(id, taskDto);
             if (status == ConstantsStatus.Success)
             {
-                return Ok("Update task successfully!");
+                return new ApiResponse
+                {
+                    Message = "Update Task Successfully!"
+                };
             }
             else
             {
-                return BadRequest("Update task failed!");
+                return new ApiResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Update Task Successfully!"
+                };
             }
         }
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public ApiResponse Delete(Guid id)
         {
             int status = _taskService.Delete(id);
             if (status == ConstantsStatus.Success)
             {
-                return Ok("Delete task successfully!");
+                return new ApiResponse
+                {
+                    Message = "Delete Task Successfully!"
+                };
             }
             else
             {
-                return BadRequest("Delete task failed!");
+                return new ApiResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Delete Task Failed!"
+                };
             }
         }
         [HttpPost("/bulk")]
-        public IActionResult BulkAdd(List<RequestTaskDto> taskDtos)
+        public ApiResponse BulkAdd(List<RequestTaskDto> taskDtos)
         {
             int status = _taskService.BulkAdd(taskDtos);
             if (status == ConstantsStatus.Success)
             {
-                return Ok("Create list new tasks successfully!");
+                return new ApiResponse
+                {
+                    Message = "Bulk Add Tasks Successfully!"
+                };
             }
             else
             {
-                return BadRequest("Create list new tasks failed!");
+                return new ApiResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Bulk Add Tasks Failed!"
+                };
             }
         }
         [HttpDelete("/bulk")]
-        public IActionResult BulkDelete(List<Guid> ids)
+        public ApiResponse BulkDelete(List<Guid> ids)
         {
             int status = _taskService.BulkDelete(ids);
-            if (status == ConstantsStatus.Success)
+            if (status == ConstantsStatusBulkDelete.AllRemoved)
             {
-                return Ok("Delete list tasks successfully!");
+                return new ApiResponse
+                {
+                    Message = "Bulk Delete Tasks Successfully!"
+                };
+            }
+            else if (status == ConstantsStatusBulkDelete.OnlyValidRemoved)
+            {
+                return new ApiResponse
+                {
+                    Message = "Bulk Delete Tasks Successfully! Bulk Delete Only Existed Ids"
+                };
             }
             else
             {
-                return BadRequest("Delete list tasks failed!");
+                return new ApiResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Bulk Delete Tasks Failed!"
+                };
             }
         }
     }

@@ -61,11 +61,15 @@ namespace Rookies_ASP.NETCoreAPI.Infrastructure.Repositories
             var taskList = _tasks.ToList();
             int numberOfRecordsRemoved = taskList.RemoveAll(task => ids.Contains(task.Id));
             if (numberOfRecordsRemoved == 0)
-                return ConstantsStatus.Failed;
+                return ConstantsStatusBulkDelete.NothingRemoved;
             else
             {
                 _tasks = taskList;
-                return ConstantsStatus.Success;
+                //compare number of records remove with number of input id
+                if (numberOfRecordsRemoved == ids.Count())
+                    return ConstantsStatusBulkDelete.AllRemoved;
+                else
+                    return ConstantsStatusBulkDelete.OnlyValidRemoved;
             }
         }
         public int BulkAdd(List<Task> tasks)
