@@ -38,7 +38,7 @@ namespace Rookies_ASP.NETCoreAPI.API.Controllers
             else
                 return new ApiResponse
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Get Task Failed!"
                 };
         }
@@ -58,7 +58,7 @@ namespace Rookies_ASP.NETCoreAPI.API.Controllers
             {
                 return new ApiResponse
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Add Task Failed!"
                 };
             }
@@ -78,7 +78,7 @@ namespace Rookies_ASP.NETCoreAPI.API.Controllers
             {
                 return new ApiResponse
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Update Task Successfully!"
                 };
             }
@@ -98,7 +98,7 @@ namespace Rookies_ASP.NETCoreAPI.API.Controllers
             {
                 return new ApiResponse
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Delete Task Failed!"
                 };
             }
@@ -118,7 +118,7 @@ namespace Rookies_ASP.NETCoreAPI.API.Controllers
             {
                 return new ApiResponse
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Bulk Add Tasks Failed!"
                 };
             }
@@ -145,7 +145,7 @@ namespace Rookies_ASP.NETCoreAPI.API.Controllers
             {
                 return new ApiResponse
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Bulk Delete Tasks Failed!"
                 };
             }
